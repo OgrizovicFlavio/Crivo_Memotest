@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Collections.Generic;
 
 // Lógica principal del memotest: mazo, intentos, puntaje y chequeo de match.
@@ -12,8 +13,6 @@ public class GameLogic
     // Puntos del jugador: se suma 1 por cada par encontrado
     public int Score { get; private set; }
 
-    // Almacena la primera carta girada en el turno actual
-    private CardData firstFlipped;
 
     // Constructor: recibe la cantidad de pares a generar y la cantidad de intentos
     public GameLogic(int totalPairs, int attempts)
@@ -56,29 +55,20 @@ public class GameLogic
 
     // Intenta dar vuelta una carta y verificar si hay match con la anterior
     // Devuelve true si se completó un intento (es decir, se giraron 2 cartas)
-    public bool TryFlip(CardData selectedCard, out bool matched)
+    public bool TryMatch(CardData first, CardData second, out bool matched)
     {
         matched = false;
-
-        // Si esta es la primera carta del intento, la guardamos
-        if (firstFlipped == null)
-        {
-            firstFlipped = selectedCard;
-            return false; // No se completó un intento aún
-        }
-
-        // Segunda carta: restamos un intento
         AttemptsRemaining--;
 
-        // Si coinciden los IDs, hay match = se suma 1 punto
-        if (firstFlipped.Equals(selectedCard))
+        if (first.Equals(second))
         {
             Score++;
             matched = true;
         }
 
-        // Reiniciamos para el próximo intento
-        firstFlipped = null;
-        return true;
+        Debug.Log($"Intentos restantes: {AttemptsRemaining}");
+        Debug.Log($"Puntaje actual: {Score}");
+
+        return true; // Siempre devuelve true porque se completó un intento
     }
 }
