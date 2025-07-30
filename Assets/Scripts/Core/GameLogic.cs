@@ -66,9 +66,6 @@ public class GameLogic
             matched = true;
         }
 
-        Debug.Log($"Intentos restantes: {AttemptsRemaining}");
-        Debug.Log($"Puntaje actual: {Score}");
-
         return true; // Siempre devuelve true porque se completó un intento
     }
 }

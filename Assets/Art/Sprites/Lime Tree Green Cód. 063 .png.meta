@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cdb41532d1c910248bb38321cebe5abb
+guid: 9f94f5e1d90177c46b08ab8ca970c555
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -149,13 +149,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rojo
+      name: "Lime Tree Green C\xF3d. 063 _0"
       rect:
         serializedVersion: 2
-        x: 48
-        y: 545
-        width: 273
-        height: 429
+        x: 28
+        y: 39
+        width: 200
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,113 +163,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c56e1619b79da3c458a28bf54af51bf3
-      internalID: 1415559858
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Amarillo
-      rect:
-        serializedVersion: 2
-        x: 374
-        y: 550
-        width: 275
-        height: 424
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 24194720d44797b47bd26fc09b2a0374
-      internalID: 723759317
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Verde
-      rect:
-        serializedVersion: 2
-        x: 695
-        y: 546
-        width: 280
-        height: 428
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0b1732f1492e3da469952484fc6b0c98
-      internalID: -1401916843
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Azul
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 63
-        width: 273
-        height: 422
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 36dff327866e6d841ae75aef444adcda
-      internalID: -2056925346
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Violeta
-      rect:
-        serializedVersion: 2
-        x: 376
-        y: 63
-        width: 274
-        height: 424
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 45839fb692a196747a98db86d4c0c8dd
-      internalID: 1917247899
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blanco
-      rect:
-        serializedVersion: 2
-        x: 695
-        y: 57
-        width: 280
-        height: 428
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5c56cac569398d844ba6e662e1b5e6ba
-      internalID: -2123605747
+      spriteID: d6b13f78d4e1f6440b81a100041986a7
+      internalID: -1581591628
       vertices: []
       indices: 
       edges: []
@@ -285,12 +180,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Amarillo: 723759317
-      Azul: -2056925346
-      Blanco: -2123605747
-      Rojo: 1415559858
-      Verde: -1401916843
-      Violeta: 1917247899
+      "Lime Tree Green C\xF3d. 063 _0": -1581591628
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
