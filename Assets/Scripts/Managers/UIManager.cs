@@ -11,58 +11,62 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private Image progressBarFill;
 
+    [Header("Countdown Panel")]
+    [SerializeField] private CountdownUI countdownUI;
+
     [Header("End Panels")]
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject losePanel;
 
-    [Header("Win Panel Buttons")]
-    [SerializeField] private Button nextLevelButton;
-    [SerializeField] private Button returnToMenuButton;
+    [Header("Win Panel Sections")]
+    [SerializeField] private GameObject winButtons;
+    [SerializeField] private GameObject winCreditsPanel;
 
-    [Header("Lose Panel Buttons")]
-    [SerializeField] private Button retryButton;
-    [SerializeField] private Button quitGameButton;
+    [Header("Lose Panel Sections")]
+    [SerializeField] private GameObject loseButtons;
+    [SerializeField] private GameObject loseCreditsPanel;
+
+    private int currentLevel = 1;
 
     private void Awake()
     {
         if (winPanel != null) winPanel.SetActive(false);
         if (losePanel != null) losePanel.SetActive(false);
+        if (winCreditsPanel != null) winCreditsPanel.SetActive(false);
+        if (loseCreditsPanel != null) loseCreditsPanel.SetActive(false);
     }
 
     public void SetAttempts(int attempts, bool showValue = true)
     {
-        if (!showValue)
-        {
-            attemptsText.text = "INTENTOS:";
-        }
-        else
-        {
-            attemptsText.text = attempts < 0 ? "INTENTOS: ∞" : $"INTENTOS: {attempts}";
-        }
+        attemptsText.text = !showValue ? "INTENTOS:" : (attempts < 0 ? "INTENTOS: ∞" : $"INTENTOS: {attempts}");
     }
 
     public void SetProgress(int currentScore, int totalPairs)
     {
         float fill = (float)currentScore / totalPairs;
-
         if (progressBarFill != null && totalPairs > 0)
             progressBarFill.DOFillAmount(fill, 0.3f).SetEase(Ease.OutQuad);
     }
 
+    public void ResetProgressBar()
+    {
+        if (progressBarFill != null)
+        {
+            progressBarFill.DOKill();
+
+            progressBarFill.DOFillAmount(0f, 0.4f)
+                .SetEase(Ease.InOutQuad);
+        }
+    }
+
     public void SetTime(float time, bool showValue = true)
     {
-        if (!showValue)
-        {
-            timerText.text = "TIEMPO:";
-        }
-        else
-        {
-            timerText.text = time < 0f ? "TIEMPO: ∞" : $"TIEMPO: {Mathf.CeilToInt(time)}";
-        }
+        timerText.text = !showValue ? "TIEMPO:" : (time < 0f ? "TIEMPO: ∞" : $"TIEMPO: {Mathf.CeilToInt(time)}");
     }
 
     public void SetLevel(int level)
     {
+        currentLevel = level;
         levelText.text = $"NIVEL {level}";
     }
 
@@ -98,16 +102,41 @@ public class UIManager : MonoBehaviour
             .SetEase(Ease.InOutQuad);
     }
 
+    public void PulseAttempts()
+    {
+        if (attemptsText == null) return;
+
+        attemptsText.transform.DOKill();
+        attemptsText.transform.localScale = Vector3.one;
+
+        attemptsText.transform.DOScale(1.2f, 0.2f)
+            .SetLoops(2, LoopType.Yoyo)
+            .SetEase(Ease.InOutQuad);
+    }
+
     public void ShowWinPanel(bool hasNextLevel)
     {
-        if (nextLevelButton != null)
-            nextLevelButton.gameObject.SetActive(hasNextLevel);
+        bool isFinalLevel = currentLevel >= 3;
+
+        if (winButtons != null)
+            winButtons.SetActive(!isFinalLevel);
+
+        if (winCreditsPanel != null)
+            winCreditsPanel.SetActive(isFinalLevel);
 
         AnimatePanel(winPanel);
     }
 
     public void ShowLosePanel()
     {
+        bool isFinalLevel = currentLevel >= 3;
+
+        if (loseButtons != null)
+            loseButtons.SetActive(!isFinalLevel);
+
+        if (loseCreditsPanel != null)
+            loseCreditsPanel.SetActive(isFinalLevel);
+
         AnimatePanel(losePanel);
     }
 
@@ -121,36 +150,32 @@ public class UIManager : MonoBehaviour
         if (canvasGroup != null && rect != null)
         {
             panel.SetActive(true);
-
             canvasGroup.alpha = 0f;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
-
             rect.localScale = Vector3.zero;
 
-            canvasGroup.DOFade(1f, 0.5f)
-                .SetEase(Ease.OutQuad)
-                .OnComplete(() =>
-                {
-                    canvasGroup.interactable = true;
-                    canvasGroup.blocksRaycasts = true;
-                });
+            canvasGroup.DOFade(1f, 0.5f).SetEase(Ease.OutQuad).OnComplete(() =>
+            {
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+            });
 
             rect.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack);
         }
     }
 
-    public void HideWinPanel()
+    public void HideWinPanel(System.Action onComplete = null)
     {
-        HidePanel(winPanel);
+        HidePanel(winPanel, onComplete);
     }
 
-    public void HideLosePanel()
+    public void HideLosePanel(System.Action onComplete = null)
     {
-        HidePanel(losePanel);
+        HidePanel(losePanel, onComplete);
     }
 
-    private void HidePanel(GameObject panel)
+    private void HidePanel(GameObject panel, System.Action onComplete = null)
     {
         if (panel == null) return;
 
@@ -167,34 +192,25 @@ public class UIManager : MonoBehaviour
                 .OnComplete(() =>
                 {
                     panel.SetActive(false);
+                    onComplete?.Invoke();
                 });
+        }
+        else
+        {
+            panel.SetActive(false);
+            onComplete?.Invoke();
         }
     }
 
-    public void SetupEndPanelButtons(System.Action onNextLevel, System.Action onReturnToMenu, System.Action onRetry, System.Action onQuit)
+    public void StartCountdown(System.Action onComplete)
     {
-        if (nextLevelButton != null)
+        if (countdownUI != null)
         {
-            nextLevelButton.onClick.RemoveAllListeners();
-            nextLevelButton.onClick.AddListener(() => onNextLevel?.Invoke());
+            countdownUI.StartCountdown(onComplete);
         }
-
-        if (returnToMenuButton != null)
+        else
         {
-            returnToMenuButton.onClick.RemoveAllListeners();
-            returnToMenuButton.onClick.AddListener(() => onReturnToMenu?.Invoke());
-        }
-
-        if (retryButton != null)
-        {
-            retryButton.onClick.RemoveAllListeners();
-            retryButton.onClick.AddListener(() => onRetry?.Invoke());
-        }
-
-        if (quitGameButton != null)
-        {
-            quitGameButton.onClick.RemoveAllListeners();
-            quitGameButton.onClick.AddListener(() => onQuit?.Invoke());
+            onComplete?.Invoke();
         }
     }
 }

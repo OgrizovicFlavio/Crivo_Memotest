@@ -16,4 +16,4 @@ MonoBehaviour:
   totalPairs: 4
   maxAttempts: -1
   timeLimit: -1
-  memorizeDuration: 3
+  memorizeDuration: 1

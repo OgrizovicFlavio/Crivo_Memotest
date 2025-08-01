@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourSingleton<GameManager>
 {
@@ -19,11 +20,6 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     private float originalTimeLimit;
     public bool GameFinished { get; private set; }
 
-    private void Start()
-    {
-        uiManager?.SetupEndPanelButtons(OnNextLevel, OnReturnToMenu, OnRetry, OnQuitGame);
-    }
-
     protected override void OnAwaken()
     {
         base.OnAwaken();
@@ -32,10 +28,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     private void Update()
     {
-        if (GameFinished)
-            return;
-
-        if (!timerStarted)
+        if (GameFinished || !timerStarted)
             return;
 
         if (originalTimeLimit < 0f)
@@ -107,6 +100,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         if (attemptsRemaining < 0) return;
 
         attemptsRemaining--;
+        uiManager?.PulseAttempts();
+
         UpdateUI();
 
         if (attemptsRemaining <= 0)
@@ -123,7 +118,6 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         float displayTime = originalTimeLimit < 0f ? -1f : currentTime;
         uiManager?.SetTime(displayTime);
     }
-
 
     public void StartTimer()
     {
@@ -142,32 +136,31 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         uiManager?.ShowLosePanel();
     }
 
-    private void OnNextLevel()
+    public void OnNextLevel()
     {
         currentLevel++;
         uiManager.HideWinPanel();
         boardManager.LoadLevel();
     }
 
-    private void OnReturnToMenu()
+    public void OnReturnToMenu()
     {
-        Debug.Log("Volver al menú");
-        // Cargar escena del menú principal
+        uiManager.HideWinPanel(() =>
+        {
+            uiManager.HideLosePanel(() =>
+            {
+                SceneManager.LoadScene("MainMenu");
+            });
+        });
     }
 
-    private void OnRetry()
+    public void OnRetry()
     {
-        currentLevel = 1;
-        boardManager.LoadLevel();
-    }
-
-    private void OnQuitGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-    Application.Quit();
-#endif
+        uiManager.HideLosePanel(() =>
+        {
+            currentLevel = 1;
+            boardManager.LoadLevel();
+        });
     }
 
     public bool HasNextLevel()

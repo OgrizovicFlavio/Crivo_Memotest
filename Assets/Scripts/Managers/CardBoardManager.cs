@@ -7,6 +7,8 @@ public class CardBoardManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private CardView cardPrefab;
     [SerializeField] private Transform container;
+
+    [Header("UI")]
     [SerializeField] private UIManager uiManager;
 
     [Header("Sprites")]
@@ -32,6 +34,7 @@ public class CardBoardManager : MonoBehaviour
         ClearBoard();
         gameLogic = new GameLogic(totalPairs, attempts);
         uiManager?.SetLevel(level);
+        uiManager?.ResetProgressBar();
 
         // Crear cartas
         for (int i = 0; i < gameLogic.Cards.Count; i++)
@@ -68,14 +71,15 @@ public class CardBoardManager : MonoBehaviour
         uiManager?.HideGameplayTexts();
 
         // Comenzar fase de memorización
-        StartCoroutine(MemorizeAndStart());
+        uiManager.StartCountdown(() =>
+        {
+            StartCoroutine(MemorizeAndStart());
+        });
     }
 
     private IEnumerator MemorizeAndStart()
     {
         LevelData data = GameManager.Instance.GetLevelData();
-
-        yield return new WaitForSeconds(2f);
 
         foreach (var card in cardViews)
             card.SetFlipped(true, false);
