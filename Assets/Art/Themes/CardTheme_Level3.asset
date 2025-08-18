@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b003349457904a44bbdde77a56ae1d41, type: 3}
+  m_Name: CardTheme_Level3
+  m_EditorClassIdentifier: 
+  backSprite: {fileID: 21300000, guid: ffbf2df832d9a53449ebc90ec6b0328f, type: 3}
+  pairFronts:
+  - {fileID: 21300000, guid: cd08a4fa1c4f7ea4eae586617f714acb, type: 3}
+  - {fileID: 21300000, guid: 0ad1788cf7a690e4fbcf3e5cf4af58b4, type: 3}
+  - {fileID: 21300000, guid: 4f073d5a68ae7704c9d298c84f40b43f, type: 3}
+  - {fileID: 21300000, guid: df45233033a591d4b80ddaf9675e3ad6, type: 3}
+  - {fileID: 21300000, guid: dff69dd2d2f1b444ebeb11ac760290ef, type: 3}
+  - {fileID: 21300000, guid: 897895a1d548c324fb8d3cb459c4a384, type: 3}
+  - {fileID: 21300000, guid: 76d5dc25bb2b2424482f3d5e9ee22f4c, type: 3}
+  - {fileID: 21300000, guid: c379727bfe36c6e449f0c31303ddf03d, type: 3}

@@ -28,21 +28,20 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     private void Update()
     {
-        if (GameFinished || !timerStarted)
-            return;
+        if (GameFinished || !timerStarted) return;
 
         if (originalTimeLimit < 0f)
         {
-            uiManager?.SetTime(-1f);
+            uiManager?.SetTime(-1f); // no debería verse porque el grupo estará oculto en nivel 1
             return;
         }
 
         currentTime -= Time.deltaTime;
 
-        if (originalTimeLimit > 0f && currentTime <= 10f)
+        // Bump del tiempo CADA segundo cuando hay límite
+        if (originalTimeLimit >= 0f)
         {
             int currentSecond = Mathf.CeilToInt(currentTime);
-
             if (currentSecond != Mathf.CeilToInt(lastPulseTime))
             {
                 lastPulseTime = currentTime;
@@ -56,18 +55,18 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
             HandleLose();
         }
 
-        uiManager?.SetTime(currentTime);
+        uiManager?.SetTime(currentTime); // muestra número; la visibilidad la maneja el CardBoard/flags
     }
 
     public void InitializeGame(LevelData data)
     {
-        this.currentLevel = data.levelNumber;
-        this.totalPairs = data.totalPairs;
-        this.attemptsRemaining = data.maxAttempts;
-        this.originalTimeLimit = data.timeLimit;
-        this.currentTime = data.timeLimit;
-        this.currentScore = 0;
-        this.timerStarted = false;
+        currentLevel = data.levelNumber;
+        totalPairs = data.totalPairs;
+        attemptsRemaining = data.maxAttempts;
+        originalTimeLimit = data.timeLimit;
+        currentTime = data.timeLimit;
+        currentScore = 0;
+        timerStarted = false;
         GameFinished = false;
 
         uiManager?.InitializeUI(currentLevel, attemptsRemaining, currentTime, currentScore, totalPairs);
@@ -82,47 +81,38 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public void RegisterMatch()
     {
         if (GameFinished) return;
-
         currentScore++;
-
         UpdateUI();
-
-        if (currentScore >= totalPairs)
-        {
-            HandleWin();
-        }
+        if (currentScore >= totalPairs) HandleWin();
     }
 
     public void RegisterFailedAttempt()
     {
         if (GameFinished) return;
-
-        if (attemptsRemaining < 0) return;
+        if (attemptsRemaining < 0) return; // infinito
 
         attemptsRemaining--;
         uiManager?.PulseAttempts();
 
         UpdateUI();
 
-        if (attemptsRemaining <= 0)
-        {
-            HandleLose();
-        }
+        if (attemptsRemaining <= 0) HandleLose();
     }
 
     private void UpdateUI()
     {
-        uiManager?.SetAttempts(attemptsRemaining);
+        // Visibilidad de números (no de contenedores) según reglas
+        bool showAttempts = currentLevel >= 2 && attemptsRemaining >= 0;
+        bool showTime = currentLevel >= 2 && originalTimeLimit >= 0f;
+
+        uiManager?.SetAttempts(attemptsRemaining, showAttempts);
         uiManager?.SetProgress(currentScore, totalPairs);
 
         float displayTime = originalTimeLimit < 0f ? -1f : currentTime;
-        uiManager?.SetTime(displayTime);
+        uiManager?.SetTime(displayTime, showTime);
     }
 
-    public void StartTimer()
-    {
-        timerStarted = true;
-    }
+    public void StartTimer() => timerStarted = true;
 
     private void HandleWin()
     {
@@ -149,7 +139,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         {
             uiManager.HideLosePanel(() =>
             {
-                SceneManager.LoadScene("MainMenu");
+                SceneManager.LoadScene("Main Menu");
             });
         });
     }
@@ -163,8 +153,5 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         });
     }
 
-    public bool HasNextLevel()
-    {
-        return currentLevel < levelConfigs.Count;
-    }
+    public bool HasNextLevel() => currentLevel < levelConfigs.Count;
 }

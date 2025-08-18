@@ -3,14 +3,13 @@ using UnityEngine;
 public class MainMenuManager : MonoBehaviour
 {
     [Header("Panels")]
+    [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject howToPlayPanel;
     [SerializeField] private GameObject creditsPanel;
-    [SerializeField] private GameObject mainMenuPanel;
 
     private void Awake()
     {
         howToPlayPanel.SetActive(false);
-        creditsPanel.SetActive(false);
     }
 
     public void OnPlayClicked()

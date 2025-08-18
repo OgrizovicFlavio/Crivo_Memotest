@@ -16,4 +16,5 @@ MonoBehaviour:
   totalPairs: 8
   maxAttempts: 5
   timeLimit: 60
-  memorizeDuration: 3
+  memorizeDuration: 4
+  theme: {fileID: 11400000, guid: 31be9ac482a8fd540b75dd2254830d6d, type: 2}

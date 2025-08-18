@@ -33,10 +33,7 @@ public class CountdownUI : MonoBehaviour
 
             countdownText.transform.DOScale(1.2f, 0.3f)
                 .SetEase(Ease.OutBack)
-                .OnComplete(() =>
-                {
-                    countdownText.transform.DOScale(1f, 0.1f);
-                });
+                .OnComplete(() => { countdownText.transform.DOScale(1f, 0.1f); });
 
             yield return new WaitForSeconds(1f);
         }
