@@ -1,4 +1,4 @@
-# Graphictest 🎮
+# Graphictest
 
 **Graphictest** es un videojuego de cartas tipo memotest desarrollado en Unity y C# para Android. El objetivo es encontrar los pares de cartas iguales antes que se acabe el tiempo o los intentos. 
 
